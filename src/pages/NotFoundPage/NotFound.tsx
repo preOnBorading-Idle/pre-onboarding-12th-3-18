@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './NotFound.module.scss';
-import { ROUTES } from '../../utils/constants/constants';
+import { ROUTES } from '../../constants/constants';
 
 function NotFound() {
 	const navigate = useNavigate();
