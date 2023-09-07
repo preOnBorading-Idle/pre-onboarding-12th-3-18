@@ -1,5 +1,5 @@
 //import styles from './Main.module.scss';
-import styles from './Main2.module.scss';
+import styles from './Main.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import SearchResults from '../../components/SearchResults/SearchResults';
 
@@ -46,9 +46,9 @@ export default function MainPage() {
 	}, [focusedIndex]);
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.searchContainer}>
-				<div className={styles.inputContainer}>
+		<div>
+			<div className={styles.container}>
+				<div className={styles.searchBar}>
 					<input
 						className={styles.input}
 						value={searchWord}
@@ -60,9 +60,7 @@ export default function MainPage() {
 						ref={inputRef}
 					></input>
 					{/* <button onClick={() => fetchData(debouncedWord)}> */}
-					<button>
-						<img src={SearchIcon} className={styles.searchIcon} alt="검색아이콘" />
-					</button>
+					<button className={styles.btn}>검색</button>
 				</div>
 
 				<SearchResults
