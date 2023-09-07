@@ -23,10 +23,10 @@ export default function SearchResults({
 	setInput,
 }: SearchResultsProps) {
 	return (
-		<div className={styles.resultsContainer}>
-			{showRecommendations ? <span>추천 검색어</span> : ''}
+		<div className={styles.container}>
+			{showRecommendations ? <span className={styles.subTitle}>추천 검색어</span> : ''}
 			{showRecommendations && searchResults.length === 0 ? (
-				<div className={styles.resultItem}>검색어 없음</div>
+				<div className={styles.nolist}>검색어 없음</div>
 			) : (
 				searchResults.slice(0, 7).map((result, index) => (
 					<div
@@ -50,7 +50,7 @@ export default function SearchResults({
 						ref={ref => (resultRefs.current[index] = ref)}
 					>
 						<img src={SearchIcon} className={styles.searchIcon} alt="검색아이콘" />
-						{' ' + result.sickNm}
+						<div className={styles.text}>{' ' + result.sickNm}</div>
 					</div>
 				))
 			)}
