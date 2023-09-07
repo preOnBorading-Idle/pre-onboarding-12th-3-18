@@ -7,15 +7,15 @@ import useDebounce from '../../hooks/useDebounce';
 
 import { handleKeyDown } from '../../utils/KeyDown';
 import handleInputChange from '../../utils/ChangeInput';
-import { fetchClinicalTrialData } from '../../utils/FetchData';
+import { fetchRecommendList } from '../../utils/FetchData';
 
 import SearchIcon from '../../assets/search.svg';
 
 export default function MainPage() {
-	const [input, setInput] = useState('');
-	const debouncedInput = useDebounce(input, 500);
+	const [searchWord, setSearchWord] = useState('');
+	const debouncedWord = useDebounce(searchWord, 500);
 
-	const [searchResults, setSearchResults] = useState<any[]>([]);
+	const [recommendList, setRecommendList] = useState<any[]>([]);
 	const [showRecommendations, setShowRecommendations] = useState(false);
 
 	const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -23,18 +23,18 @@ export default function MainPage() {
 	const resultRefs = useRef<(HTMLDivElement | null)[]>([]);
 
 	useEffect(() => {
-		if (debouncedInput) {
-			fetchData(debouncedInput);
+		if (debouncedWord) {
+			fetchData(debouncedWord);
 		} else {
-			setSearchResults([]);
+			setRecommendList([]);
 		}
-	}, [debouncedInput]);
+	}, [debouncedWord]);
 
 	useEffect(() => {
-		resultRefs.current = Array(searchResults.length)
+		resultRefs.current = Array(recommendList.length)
 			.fill(null)
 			.map((_, i) => resultRefs.current[i] || null);
-	}, [searchResults]);
+	}, [recommendList]);
 
 	useEffect(() => {
 		if (focusedIndex >= 0 && focusedIndex < resultRefs.current.length) {
@@ -43,7 +43,7 @@ export default function MainPage() {
 	}, [focusedIndex]);
 
 	const fetchData = async (query: string) => {
-		await fetchClinicalTrialData(query, setSearchResults);
+		await fetchRecommendList(query, setRecommendList);
 	};
 
 	return (
@@ -52,27 +52,27 @@ export default function MainPage() {
 				<div className={styles.inputContainer}>
 					<input
 						className={styles.input}
-						value={input}
-						onChange={e => handleInputChange(e, setInput, setSearchResults)}
-						onKeyDown={e => handleKeyDown(e, searchResults, resultRefs, setFocusedIndex, inputRef)}
+						value={searchWord}
+						onChange={e => handleInputChange(e, setSearchWord, setRecommendList)}
+						onKeyDown={e => handleKeyDown(e, recommendList, resultRefs, setFocusedIndex, inputRef)}
 						onFocus={() => setShowRecommendations(true)}
 						onBlur={() => setShowRecommendations(false)}
 						placeholder="검색어를 입력해주세요."
 						ref={inputRef}
 					></input>
-					<button onClick={() => fetchData(debouncedInput)}>
+					<button onClick={() => fetchData(debouncedWord)}>
 						<img src={SearchIcon} className={styles.searchIcon} alt="검색아이콘" />
 					</button>
 				</div>
 
 				<SearchResults
-					searchResults={searchResults}
+					searchResults={recommendList}
 					focusedIndex={focusedIndex}
 					inputRef={inputRef}
 					showRecommendations={showRecommendations}
 					resultRefs={resultRefs}
 					setFocusedIndex={setFocusedIndex}
-					setInput={setInput}
+					setInput={setSearchWord}
 				/>
 			</div>
 		</div>

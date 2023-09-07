@@ -16,6 +16,10 @@ function handleKeyDown(
 		}
 		setFocusedIndex(0);
 		inputRef.current?.blur();
+	} else if (e.key === 'ArrowUp') {
+		e.preventDefault();
+		setFocusedIndex(-1);
+		inputRef.current?.focus();
 	}
 }
 
