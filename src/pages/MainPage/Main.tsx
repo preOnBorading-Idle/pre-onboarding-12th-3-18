@@ -7,7 +7,7 @@ import useDebounce from '../../hooks/useDebounce';
 
 import { handleKeyDown } from '../../utils/KeyDown';
 import handleInputChange from '../../utils/ChangeInput';
-import { fetchRecommendList } from '../../utils/FetchData';
+import { getClinicalTrial } from '../../api/Api';
 
 import SearchIcon from '../../assets/search.svg';
 
@@ -23,11 +23,14 @@ export default function MainPage() {
 	const resultRefs = useRef<(HTMLDivElement | null)[]>([]);
 
 	useEffect(() => {
-		if (debouncedWord) {
-			fetchData(debouncedWord);
-		} else {
-			setRecommendList([]);
+		const axiosSick = async () => {
+			const data = await getClinicalTrial(debouncedWord);
+			setRecommendList(data);
+		};
+		if (!debouncedWord) {
+			return setRecommendList([]);
 		}
+		axiosSick();
 	}, [debouncedWord]);
 
 	useEffect(() => {
@@ -41,10 +44,6 @@ export default function MainPage() {
 			resultRefs.current[focusedIndex]?.focus();
 		}
 	}, [focusedIndex]);
-
-	const fetchData = async (query: string) => {
-		await fetchRecommendList(query, setRecommendList);
-	};
 
 	return (
 		<div className={styles.container}>
@@ -60,7 +59,8 @@ export default function MainPage() {
 						placeholder="검색어를 입력해주세요."
 						ref={inputRef}
 					></input>
-					<button onClick={() => fetchData(debouncedWord)}>
+					{/* <button onClick={() => fetchData(debouncedWord)}> */}
+					<button>
 						<img src={SearchIcon} className={styles.searchIcon} alt="검색아이콘" />
 					</button>
 				</div>
