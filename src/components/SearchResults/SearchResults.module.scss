@@ -3,7 +3,7 @@
 	box-sizing: border-box;
 	padding: 20px 0px;
 	width: 100%;
-	background-color: #fff;
+	background-color: rgba(0, 0, 0, 0);
 	border-radius: 20px;
 
 	.resultItem {
@@ -13,6 +13,7 @@
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+		border-radius: 30px;
 	}
 
 	.nolist {
@@ -29,7 +30,7 @@
 		align-items: center;
 		cursor: pointer;
 		outline: 0;
-		background-color: #ededed;
+		background-color: #fff;
 	}
 }
 
