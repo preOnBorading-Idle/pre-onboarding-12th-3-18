@@ -1,18 +1,52 @@
-.resultsContainer {
+.container {
 	margin-top: 10px;
+<<<<<<< HEAD
 	overflow-y: auto;
 	width: 90%;
+=======
+	box-sizing: border-box;
+	padding: 20px 0px;
+	width: 100%;
+	background-color: rgba(0, 0, 0, 0);
+	border-radius: 20px;
+>>>>>>> 54ab922dde90126b76e09db061827d592b9dda6f
 
 	.resultItem {
-		padding: 8px;
-		border-bottom: 1px solid #ccc;
+		list-style: none;
+		padding: 10px 10px 10px 30px;
+		font-size: 16px;
+		display: flex;
+		align-items: center;
 		cursor: pointer;
+		border-radius: 30px;
+	}
+
+	.nolist {
+		padding-left: 30px;
+		color: #6a737b;
+		margin-top: 20px;
 	}
 
 	.focusedItem {
-		background-color: #0078d4;
-		color: white;
-		font-weight: 700;
+		list-style: none;
+		padding: 10px 10px 10px 30px;
+		font-size: 16px;
+		display: flex;
+		align-items: center;
 		cursor: pointer;
+		outline: 0;
+		background-color: #fff;
 	}
+}
+
+.subTitle {
+	color: #6a737b;
+	font-size: 13px;
+	margin: 0;
+	padding-left: 30px;
+}
+
+.text {
+	font-size: 16px;
+	margin: 0 0 0 12px;
 }

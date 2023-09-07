@@ -1,11 +1,9 @@
-//import styles from './Main.module.scss';
-import styles from './Main2.module.scss';
+import styles from './Main.module.scss';
 import React, { useEffect, useRef, useState } from 'react';
 import SearchResults from '../../components/SearchResults/SearchResults';
 import useDebounce from '../../hooks/useDebounce';
 import handleInputChange from '../../utils/ChangeInput';
 import { getClinicalTrial } from '../../api/Api';
-import SearchIcon from '../../assets/search.svg';
 import { SearchWordType } from '../../types/SearchWord.interface';
 
 export default function MainPage() {
@@ -53,9 +51,9 @@ export default function MainPage() {
 	};
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.searchContainer}>
-				<div className={styles.inputContainer}>
+		<div>
+			<div className={styles.container}>
+				<div className={styles.searchBar}>
 					<input
 						className={styles.input}
 						value={searchWord}
@@ -67,9 +65,7 @@ export default function MainPage() {
 						ref={inputRef}
 						autoFocus
 					></input>
-					<button>
-						<img src={SearchIcon} className={styles.searchIcon} alt="검색아이콘" />
-					</button>
+					<button className={styles.btn}>검색</button>
 				</div>
 
 				<SearchResults
