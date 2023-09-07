@@ -1,7 +1,7 @@
 import React from 'react';
 import { getClinicalTrial } from '../api/Api';
 
-export async function fetchClinicalTrialData(
+export async function fetchRecommendList(
 	query: string,
 	setSearchResults: React.Dispatch<React.SetStateAction<any[]>>,
 ) {
