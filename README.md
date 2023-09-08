@@ -30,14 +30,14 @@ $ npm start
 
 ### 구현 영상
 
-|            (구현 영상제목 - 수정)     |       (구현 영상제목 - 수정)      |
+|            검색 결과 표시     |       키보드로 추천 검색어 이동      |
 | :-------------------------: | :-----------------------------------------------: |
-| <img width="400" alt="issueList_gif" src="https://github.com/wanted-pre-onboarding-12th-11/pre-onboarding-12th-2-11/assets/124250465/4b3e2e9f-51a7-4e84-9ed6-eee60723b67a" /> | <img width="400" alt="issueDetail_gif" src="https://github.com/wanted-pre-onboarding-12th-11/pre-onboarding-12th-2-11/assets/124250465/4696107f-d5ed-4bce-8fcd-6c452deeb740" />|
+| <img width="400" alt="issueList_gif" src="https://github.com/preOnBorading-Idle/pre-onboarding-12th-3-18/assets/101536766/e3c26e96-af44-4792-8d0b-5a23de39df0b" /> | <img width="400" alt="issueDetail_gif" src="https://github.com/preOnBorading-Idle/pre-onboarding-12th-3-18/assets/101536766/ed64410f-86ed-412c-b6f1-83b6716a383c" />|
 
 
-|                   (구현 영상제목 - 수정)            |     (구현 영상제목 - 수정)   |
+|                   Api 호출            |     추천 검색어 캐싱   |
 | :----------------------------: | :-----------------------------------: |
-| <img width="400" alt="404" src="https://github.com/wanted-pre-onboarding-12th-11/pre-onboarding-12th-2-11/assets/124250465/ffa83a92-6ca6-4535-a36b-de036de37951"> | <img width="400" alt="notopen" src="https://github.com/wanted-pre-onboarding-12th-11/pre-onboarding-12th-2-11/assets/124250465/14d37aff-5be1-426e-9c61-16d9a92c2f3a"> |
+| <img width="400" alt="404" src="https://github.com/preOnBorading-Idle/pre-onboarding-12th-3-18/assets/101536766/93df7a13-ccc9-4338-be23-f1584e4ccf63"> | <img width="400" alt="notopen" src="https://github.com/preOnBorading-Idle/pre-onboarding-12th-3-18/assets/101536766/461ae665-ca2a-489d-a07f-f213036e07da"> |
 
 ## ✨ Best Practice 논의
 
