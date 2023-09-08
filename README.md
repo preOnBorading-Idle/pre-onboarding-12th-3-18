@@ -175,28 +175,47 @@ searchResults.slice(0, MAX_LIST_NUM).map((result, index) => (
 ```
 📦src
  ┣ 📂api
+ ┃ ┗ 📜Api.ts
  ┣ 📂assets
+ ┃ ┗ 📜search.svg
  ┣ 📂components
- ┃ ┣ 📂loadingSpinner
- ┃ ┗ 📂SearchResults
+ ┃ ┣ 📂SearchResults
+ ┃ ┃ ┣ 📜SearchResults.module.scss
+ ┃ ┃ ┗ 📜SearchResults.tsx
+ ┃ ┗ 📂loadingSpinner
+ ┃ ┃ ┣ 📜LoadingSpinner.module.scss
+ ┃ ┃ ┗ 📜LoadingSpinner.tsx
  ┣ 📂constants
+ ┃ ┗ 📜constants.ts
  ┣ 📂hooks
+ ┃ ┗ 📜useDebounce.tsx
  ┣ 📂pages
  ┃ ┣ 📂MainPage
+ ┃ ┃ ┣ 📜Main.module.scss
+ ┃ ┃ ┗ 📜Main.tsx
  ┃ ┗ 📂NotFoundPage
+ ┃ ┃ ┣ 📜NotFound.module.scss
+ ┃ ┃ ┗ 📜NotFound.tsx
  ┣ 📂types
+ ┃ ┗ 📜SearchWord.interface.ts
  ┣ 📂utils
+ ┃ ┣ 📜cache.ts
+ ┃ ┗ 📜changeInput.ts
+ ┣ 📜App.tsx
+ ┣ 📜index.css
+ ┣ 📜index.tsx
+ ┗ 📜react-app-env.d.ts
  ```
 
 ## ✅ 팀 컨벤션
 ### 브랜치 형식
-    ```jsx
+    
     main
     |_develop
     	|_feature/a
     	|_feature/b
     	|_feature/c
-    ```
+    
 ### 커밋 메세지
 - 수정
     
