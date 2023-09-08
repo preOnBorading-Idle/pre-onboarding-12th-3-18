@@ -234,7 +234,7 @@ searchResults.slice(0, MAX_LIST_NUM).map((result, index) => (
     | remove | 파일을 삭제하는 작업만 수행한 경우 |
     | !HOTFIX | 급하게 치명적인 버그를 고쳐야하는 경우 |
 
-  ### git actions
+### git actions
 
 ```jsx
 on:
