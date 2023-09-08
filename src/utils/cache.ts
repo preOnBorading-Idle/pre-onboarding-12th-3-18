@@ -1,5 +1,7 @@
+import { CACHE_NAME } from '../constants/constants';
+
 export const getCacheByKey = async (key: string) => {
-	const cache = await caches.open('cache');
+	const cache = await caches.open(CACHE_NAME);
 
 	const keys = await cache.keys();
 	const cachedResponses = await Promise.all(
@@ -42,7 +44,7 @@ export const setCacheByExpireTime = async ({
 	value: string;
 	expireTime: number;
 }) => {
-	const cache = await caches.open('cache');
+	const cache = await caches.open(CACHE_NAME);
 	const item = {
 		value,
 		expiry: new Date().getTime() + expireTime,
