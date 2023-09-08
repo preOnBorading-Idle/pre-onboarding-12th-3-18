@@ -87,7 +87,7 @@ $ npm start
 | 허완 | useGetList 커스텀 훅을 생성, 캐싱처리된 데이터를 리턴하는 upateData 함수를 setTimeout를 사용하여 debounce 처리 |
 | 양정규 | useDebounce → setTimeout으로 구현 |
 
-팀원들과 논의 한 결과, setTimeout을 사용해서 구현한 디바운싱 로직을 useDebounce 훅으로 분리하여 적용하는 방법을 best practice로 채택하였습니다.
+**팀원들과 논의 한 결과, setTimeout을 사용해서 구현한 디바운싱 로직을 useDebounce 훅으로 분리하여 적용하는 방법을 best practice로 채택하였습니다.**
 
 ```ts
 function useDebounce(value: string, delay: number) {
@@ -151,7 +151,7 @@ function useDebounce(value: string, delay: number) {
 | 양정규 | onKeyDown<br/>→ArrowDown, ArrowUp, Enter에 동작하는 state 변수를 이용<br/>*useRef방식으로 리팩토링 예정 |
 
 
-useRef를 사용하여 DOM 요소에 접근하고, useState를 사용하여 검색 결과 리스트의 포커스 상태, 검색어 입력 상태 등을 관리하는 방법을 best practice로 채택하였습니다.
+**useRef를 사용하여 DOM 요소에 접근하고, useState를 사용하여 검색 결과 리스트의 포커스 상태, 검색어 입력 상태 등을 관리하는 방법을 best practice로 채택하였습니다.**
 
 ```ts
 const handleResultKeyDown = (...) => {
