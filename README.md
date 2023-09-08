@@ -102,6 +102,73 @@ function useDebounce(value: string, delay: number) {
 ```
 
 ---
+### 2. 키보드 만으로 추천 검색어들로 이동 가능하도록 구현
+
+### 🤔 useRef vs useState
+
+**useRef:**
+
+👍 장점:
+
+> 1. useRef를 사용하면 DOM 요소나 기타 참조를 관리하기 쉽다.
+> 2. useRef를 사용하면 해당 참조가 변경되어도 컴포넌트의 리렌더링이 발생하지 않는다. 이를 통해 불필요한 리렌더링을 방지할 수 있다.
+> 3. useRef로 관리되는 값은 리렌더링 간에 보존되므로 이전 값에 접근할 수 있다.
+
+👎 단점:
+
+> 1. useRef로 관리되는 값은 변경된다고 해서 컴포넌트의 리렌더링이 발생하지 않는다. 따라서 상태 변화를 감지하기 어렵다. 즉, 상태 변경에는 useState가 더 적합하다.
+
+**useState:**
+
+👍 장점:
+
+> 1. useState를 사용하면 컴포넌트의 상태를 관리하기 쉽다. 검색 결과 리스트의 포커스 상태, 검색어 입력 상태 등을 관리하는 데 유용하다.
+
+👎 단점:
+
+> 1. useState를 사용하면 불필요한 리렌더링이 발생할 수 있다.
+> 2. onKeyDown 이벤트 중복으로 2번 실행되는 문제 발생
+> > - 키보드 이벤트 핸들러가 두 번 호출되는 현상 (글자가 조합 중인지 조합이 끝난 상태인지를 알 수 없어 생기는 문제)
+> > - if (e.nativeEvent.isComposing) return; 코드 추가 // e.native.isComposing이 true이면 함수를 리턴하게 함으로써 중복을 방지하도록 해결
+
+### 😎 결과
+요약하자면, 저희 팀원들은 **DOM 요소나 참조를 관리하기에 유용하며 불필요한 리렌더링도 줄일 수 있는 useRef를 사용**하는 것이 더 적절하다고 판단했습니다. (+ useRef는 react에서 dom 조작을 위해 권장하는 훅)
+
+아래 사진은 저희 팀원들의 구현 방법입니다.
+
+![image](https://github.com/preOnBorading-Idle/pre-onboarding-12th-3-18/assets/122953242/7ad3ddc3-b45b-4b7a-835e-a0c897007af3)
+
+
+useRef를 사용하여 DOM 요소에 접근하고, useState를 사용하여 검색 결과 리스트의 포커스 상태, 검색어 입력 상태 등을 관리하는 방법을 best practice로 채택하였습니다.
+
+```ts
+const handleResultKeyDown = (...) => {
+		const length = searchResults.length < MAX_LIST_NUM ? searchResults.length : MAX_LIST_NUM;
+
+		if (e.key === 'ArrowDown') {
+			e.preventDefault();
+			const nextIndex = (index + 1) % length;
+			setFocusedIndex(nextIndex);
+		} else if (e.key === 'ArrowUp') {
+			e.preventDefault();
+			const prevIndex = (index - 1 + length) % length;
+			setFocusedIndex(prevIndex);
+		} else if (e.key === 'Enter') {
+			setInput(result.sickNm);
+			inputRef.current?.focus();
+		}
+	};
+...
+searchResults.slice(0, MAX_LIST_NUM).map((result, index) => (
+	<div
+    ...
+    className={`${styles.resultItem} ${focusedIndex === index ? styles.focusedItem : ''}`} 
+    ref={ref => (resultRefs.current[index] = ref)}
+  >...</div>
+				))
+```
+
+---
 
 
 ## 📁 디렉토리 구조
