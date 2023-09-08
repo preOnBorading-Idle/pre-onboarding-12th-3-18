@@ -234,6 +234,50 @@ searchResults.slice(0, MAX_LIST_NUM).map((result, index) => (
     | remove | 파일을 삭제하는 작업만 수행한 경우 |
     | !HOTFIX | 급하게 치명적인 버그를 고쳐야하는 경우 |
 
+  ### git actions
+
+```jsx
+on:
+  pull_request:
+    types: [opened]
+  issues:
+    types: [opened]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - if: ${{ github.event.issue }}
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'add-assignees'
+          assignees: ${{ github.event.issue.user.login }}
+          token: ${{ secrets.TOKEN }}
+
+      - if: ${{ github.event.pull_request }}
+        uses: hkusu/review-assign-action@v1
+        with:
+          assignees: ${{ github.event.pull_request.user.login }}
+          reviewers: ${{ vars.REVIEWERS }}
+          github-token: ${{ secrets.TOKEN }}
+
+  project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@main
+        with:
+          project-url: ${{ vars.PROJECT_URL }}
+          github-token: ${{ secrets.TOKEN }}
+
+```
+
+### 😎 결과
+
+기존 프로젝트들을 하면서 issue 기능을 자주 사용하였는데, 추가적으로 이 부분도 **자동적으로 해주면 좋을 것 같아 Actions를 구현**하였습니다.
+github-token은 secret으로, REVIEWERS와 PROJECT_URL은 var로 관리하여 불러오게 변수를 설정하였습니다.
+
+issue와 pull_request가 등록이 되면 자동으로 assignees를 등록해주고, REVIEWERS를 등록해주는 actions을 넣어 더욱 편리해졌습니다.
+
 ## 기술스택 
 
 ### Environment
