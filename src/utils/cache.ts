@@ -1,14 +1,35 @@
 export const getCacheByKey = async (key: string) => {
 	const cache = await caches.open('cache');
+
+	const keys = await cache.keys();
+	const cachedResponses = await Promise.all(
+		keys.map(async key => {
+			return await cache.match(key);
+		}),
+	);
+
+	await Promise.all(
+		cachedResponses.map(async (response, index) => {
+			if (response && response.ok) {
+				try {
+					const jsonData = await response.json();
+					if (jsonData.expiry < new Date().getTime()) {
+						cache.delete(keys[index]);
+					}
+				} catch (error) {
+					return false;
+				}
+			}
+		}),
+	);
+
 	const cachedResponse = await cache.match(key);
 
 	if (cachedResponse) {
 		const cachedData = await cachedResponse.json();
-
-		if (cachedData.expiry > new Date().getTime()) {
-			return cachedData.value;
-		}
+		return cachedData.value;
 	}
+
 	return null;
 };
 
