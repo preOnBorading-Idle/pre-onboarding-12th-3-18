@@ -77,9 +77,15 @@ $ npm start
 
 요약하자면, 저희 팀원들은 상황에 따라 적절한 방법을 쓰는 것의 효율성을 고려하여 **사용자 입력을 기다려야하는 지금과 같은 경우에는 디바운싱을 사용하는 것이 불필요한 API 호출을 방지**하는 면에서 더 적절하다고 판단했습니다.
 
-아래 사진은 저희 팀원들의 구현 방법입니다.
+아래의 표는 저희 팀원들의 구현 방법입니다.
 
-![image](https://github.com/preOnBorading-Idle/pre-onboarding-12th-3-18/assets/122953242/ab1a4273-613b-405b-89af-e2516290c07e)
+| 이름 | 입력마다 API 호출하지 않도록 API 호출 횟수를 줄이는 전략 수립 및 실행 |
+| --- | --- |
+| 김태완 | useDebounce 훅으로 분리 debounce setTimeout을 사용하여 구현 |
+| 이윤주 | useDebounce 커스텀훅을 생성하여 검색 디바운싱 구현 ⇒ setTimeout 사용하여 일정 시간 지정 |
+| 장준희 | useDebounce 훅 구현 : setTimeout을 사용해서 일정 시간 동안 키보드 입력이 없을 때 api 호출되도록 구현. |
+| 허완 | useGetList 커스텀 훅을 생성, 캐싱처리된 데이터를 리턴하는 upateData 함수를 setTimeout를 사용하여 debounce 처리 |
+| 양정규 | useDebounce → setTimeout으로 구현 |
 
 팀원들과 논의 한 결과, setTimeout을 사용해서 구현한 디바운싱 로직을 useDebounce 훅으로 분리하여 적용하는 방법을 best practice로 채택하였습니다.
 
@@ -134,9 +140,15 @@ function useDebounce(value: string, delay: number) {
 ### 😎 결과
 요약하자면, 저희 팀원들은 **DOM 요소나 참조를 관리하기에 유용하며 불필요한 리렌더링도 줄일 수 있는 useRef를 사용**하는 것이 더 적절하다고 판단했습니다. (+ useRef는 react에서 dom 조작을 위해 권장하는 훅)
 
-아래 사진은 저희 팀원들의 구현 방법입니다.
+아래의 표는 저희 팀원들의 구현 방법입니다.
 
-![image](https://github.com/preOnBorading-Idle/pre-onboarding-12th-3-18/assets/122953242/7ad3ddc3-b45b-4b7a-835e-a0c897007af3)
+| 이름 | 키보드 만으로 추천 검색어들로 이동 가능하도록 구현 |
+| --- | --- |
+| 김태완 | useState로 index 이동으로 구현<br/>onKeyDown 함수로 ArrowUp / Down |
+| 이윤주 | useState를 사용하여 추천검색어 데이터 배열의 index 이동으로 구현<br/>키보드 이벤트를 이용해 onKeyDown 함수를 구현하여 ArrowUp, ArrowDown, Enter 이벤트별로 이벤트 처리하도록 구현 |
+| 장준희 | useRef를 사용하여 DOM 요소 이동 가능하도록 구현.<br/>1. 검색어 입력 폼에서 화살표 아래키로 추천 검색어로 이동<br/>2. 추천 검색어 내에서 화살표 위, 아래키로 이동<br/>3. 추천 검색어에서 엔터 키를 누르면 다시 검색어 입력 폼으로 focus 이동 |
+| 허완 | useRef 사용 시도(미구현) |
+| 양정규 | onKeyDown<br/>→ArrowDown, ArrowUp, Enter에 동작하는 state 변수를 이용<br/>*useRef방식으로 리팩토링 예정 |
 
 
 useRef를 사용하여 DOM 요소에 접근하고, useState를 사용하여 검색 결과 리스트의 포커스 상태, 검색어 입력 상태 등을 관리하는 방법을 best practice로 채택하였습니다.
