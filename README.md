@@ -181,6 +181,119 @@ searchResults.slice(0, MAX_LIST_NUM).map((result, index) => (
 ```
 
 ---
+### 3. API 호출 별로 로컬 캐싱 구현 (+ expire time)
+
+### 🤔 로컬 스토리지 vs 캐시 스토리지
+
+**로컬 스토리지 (LocalStorage):**
+
+👍 장점:
+
+> 1. 로컬 스토리지에 저장된 데이터는 브라우저를 종료하고 다시 열어도 유지된다. 따라서 장기적인 데이터 보존에 적합하다.
+> 2. 로컬 스토리지는 키-값 형식으로 데이터를 저장하고 불러오는 데 간단하게 사용할 수 있다.
+
+👎 단점:
+
+> 1. 로컬 스토리지의 저장 용량은 브라우저마다 다를 수 있지만, 일반적으로 5~10MB 정도로 제한되어 있다. 따라서 큰 데이터나 대용량 캐싱에는 부적합할 수 있다.
+
+**캐시 스토리지 (CatchStorage):**
+
+👍 장점:
+
+> 1. 캐시 스토리지는 일반적으로 로컬 스토리지보다 큰 용량을 가질 수 있다. 따라서 대용량 데이터 캐싱에 적합하다.
+> 2. 캐시 스토리지는 서비스 워커와 함께 사용하여 오프라인 액세스와 프로그레시브 웹 앱(PWA) 개발에 유용하다.
+
+👎 단점:
+
+> 1. 캐시 스토리지를 사용하기 위해서는 서비스 워커와 같은 고급 웹 기술에 대한 이해가 필요할 수 있다.
+
+### 😎 결과
+
+요약하자면, 저희 팀원들은 **익숙한 로컬 스토리지와 비슷한 기능을 하면서도 용량이 더 큰 캐시 스토리지를 사용**하는 것이 더 적절하다고 판단했습니다.
+
+**하나의 캐시 스토리지에 object형식으로 key와 expire time을 넣고, 입력한 검색어와 동일한 key가 스토리지에 있으면 해당 값을 꺼내오고, 동일한 key가 없으면 api 호출을 하는 방식을 best practice로 채택하였습니다.**
+
+```ts
+export const setCacheByExpireTime = async ({...}: {...}) => {
+	const cache = await caches.open('cache');
+	const item = {
+		value,
+		expiry: new Date().getTime() + expireTime,
+	};
+	const response = new Response(JSON.stringify(item));
+	await cache.put(key, response);
+};
+```
+
+### 3-1. expire time 검사
+
+### 🤔 setInterval로 주기적으로 검사 vs api 호출 시 마다 검사
+
+**setInterval로 주기적으로 검사하는 방법:**
+
+👍 장점:
+
+> 1. 사용자가 많을 경우, api 호출 시 마다 검사하는 방법보다 주기적인 검사를 하는 방법이 API 호출을 줄일 수 있어서 서버 부하와 네트워크 트래픽을 감소시킨다.
+> 2. 데이터의 만료 여부를 주기적으로 확인함으로써 캐시 데이터를 관리하면서도 성능을 최적화할 수 있다.
+> 3. 주기적인 검사는 서버에서 데이터를 업데이트하는 데 필요한 시간보다 더 짧게 설정되어야 한다. 그렇지 않으면 사용자는 항상 만료된 데이터를 받게 된다.
+
+👎 단점:
+
+> 1. 검사 간격에 따라 캐시의 유효성을 확인하기 때문에, 만료된 데이터가 바로 삭제되지 않을 수 있다.
+> 2. 사용자가 최신 데이터를 보려면 검사가 끝나기를 기다려야 한다.
+
+**API 호출 시 마다 검사하는 방법::**
+
+👍 장점:
+
+> 1. 요청 즉시 캐시의 유효성을 확인할 수 있으므로, 데이터가 만료되었을 때 빠르게 업데이트할 수 있다.
+> 2. 사용자가 데이터를 요청할 때마다 항상 최신 데이터를 제공할 수 있다.
+
+👎 단점:
+
+> 1. API 호출마다 캐시의 유효성을 확인하기 때문에 불필요한 네트워크 트래픽이 발생할 수 있다.
+> 2. 많은 요청이 들어오면 서버에 부하를 줄 수 있다.
+
+### 😎 결과
+
+요약하자면, 저희 팀원들은 **캐시 스토리지에 저장되어있는 데이터들의 expire time을 검사할 때, 현재로써는 사용자가 많지 않기 때문에 주기적으로 검사하는 방법보다 api 호출 시 마다 검사하는 방법을 사용**하는 것이 효율적인 측면에서 더 적절하다고 판단했습니다.
+
+아래 사진은 저희 팀원들의 구현 방법입니다.
+
+| 이름 | API 호출 별로 로컬 캐싱 구현 (+ expire time) |
+| --- | --- |
+| 김태완 | cache Storage의 header에 expire시간을  같이 저장하여 삭제. <br/> 캐시 자체가 한 검색한 값으로 header에 넣는게 관리하기 용이해서 사용 |
+| 이윤주 | cache Storage를 이용하여 로컬 캐싱 구현 : 키값을 확인하여 캐시스토리지에서 그 키값의 값이 있는지 확인하고 없으면 api를 호출하여 받아온 키값, 응답값을 캐시 스토리지에 저장해서 구현 (로컬스토리지, 세션스토리지는 5mb의 용량제한이 있음) <br/> expire time : setInterval로 주기적으로 검사 vs api 호출시마다 검사 <br/> expire time을 따로 지정해서 시간이 지나면 캐시값 삭제하기 |
+| 장준희 | api 호출로 받은 응답을 캐시 스토리지에 저장 <br/> 해당 응답을 cachedData라는 state에 저장하고, 그 응답의 expire time을 cacheExpireTimes 라는 state에 저장 <br/> expire time이 지나면 cacheExpireTimes 가 변화 <br/> useEffect의 의존성 배열에 cacheExpireTimes를 삽입하여 expire time이 변했을 때 실행되도록 구현(but, 실제로 useEffect 내에서 사용하지 않는 변수를 삽입해서 좋지 않은 방법 같음) → useEffect 내에서 setInterval로 지정 시간마다 만료된 데이터 제거 <br/> 문제점 : 새로고침 시, 캐싱과 관련된 state 값이 사라져서 캐시 스토리지에 있던 캐싱 데이터가 남아있게됨. |
+| 허완 | cache Storage 사용. <br/> getCacheData 함수에 input(검색어) 값을 전달하고 cacheStorage에 해당 input 값이 있으면 cacheStorage의 값을 리턴, 없으면 api 호출 후 응답 값을 cacheStorage에 저장 및 리턴 <br/> expire time : 브라우저 실행 시 setInterval 함수 실행. 특정 시간이 경과 되면 cacheStorage의 모든 값을 한번에 제거 |
+| 양정규 | Cache Storage vs local Storage <br/> → Google에서 ‘LocalStorage는 동기식이며 기본 스레드를 차단하므로 사용을 피해야 합니다. 약 5MB로 제한되며 문자열만 포함할 수 있습니다. 웹 작업자 또는 서비스 작업자가 액세스할 수 없습니다.’라고 cache storage를 권장하는 글이 있어 cache storage를 사용 <br/> Cache Storage 구현 <br/> → 하나의 캐시 스토리지에 object형식으로 key와 expire time을 넣는 방식으로 구현 <br/> expirte time <br/> → 현재는 api 호출이 발생할 경우 expire time 삭제 트리거로 구현됨 <br/> *즉시 캐시의 유효성을 확인할 수 있으므로, 데이터가 만료되었을 때 빠르게 업데이트가 가능하고 사용자가 데이터를 요청할 때마다 항상 최신 데이터를 제공할 수 있기 때문에 채택함 |
+
+
+**api 호출 요청 시, 캐시 스토리지에 저장되어 있는 데이터들의 expire time을 모두 검사해서 expire time이 지난 데이터들을 삭제하는 방식을 best practice로 채택하였습니다.**
+
+```ts
+export const getCacheByKey = async (key: string) => {
+  ...
+	await Promise.all(
+		cachedResponses.map(async (response, index) => {
+			if (response && response.ok) {
+				try {
+					const jsonData = await response.json();
+					if (jsonData.expiry < new Date().getTime()) {
+						cache.delete(keys[index]);
+					}
+				} catch (error) {
+					return false;
+				}
+			}
+		}),
+	);
+  ...
+};
+```
+
+---
+
 
 
 ## 📁 디렉토리 구조
