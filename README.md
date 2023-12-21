@@ -21,14 +21,6 @@ $ npm start
 - [x] 입력마다 API 호출하지 않도록 API 호출 횟수를 줄이는 전략 수립 및 실행
 - [x] API를 호출할 때 마다 console.info("calling api") 출력을 통해 콘솔창에서 API 호출 횟수 확인이 가능하도록 설정
 - [x] 키보드만으로 추천 검색어들로 이동 가능하도록 구현
-  
-### 배포 링크
-
-✌️ 개인의 서버에 올린 작업물로 2023년 10월부터는 접속이 불가 할 수 있는 점 양해바랍니다.
-
-🔗 [배포 링크](http://preonboarding-frontend-12th-jk.s3-website.ap-northeast-2.amazonaws.com/)
-
-🔧 [배포 트러블슈팅](https://www.notion.so/Uncaught-in-promise-ReferenceError-caches-is-not-defined-09b55f877dcc446d976c66490fb6c901)
 
 ### 구현 영상
 
